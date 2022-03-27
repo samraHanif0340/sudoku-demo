@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SodukoApp from './SudokuApp';
+import SodukoBoard from './SudokuBoard';
+import "./styles.css";
 
 ReactDOM.render(
-    <SodukoApp />,
+    <SodukoBoard />,
     document.getElementById("root")
 );

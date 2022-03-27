@@ -22,6 +22,36 @@ const getCharSeries = (index) => {
     }
 }
 
+
+const validatePuzzle = (grid) => {
+
+    for (let i = 0; i < grid.length; i++) {
+
+        // Validate row-wise uniqueness
+        let currRow = grid[i];
+        currRow = currRow.filter(val => val != '')
+        if ((new Set(currRow)).size != currRow.length) {
+            console.log(new Set(currRow), " Invalid in row ", i);
+            return false;
+        }
+
+        // Validate col-wise uniqueness
+        let currCol = []
+        for (let j = 0; j < grid.length; j++) {
+            currCol.push(grid[j][i]);
+        }
+
+        currCol = currCol.filter(val => val != '')
+        if ((new Set(currCol)).size != currCol.length) {
+            console.log("Invalid in column ", i);
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
 export {
-    getCharSeries
+    getCharSeries, validatePuzzle
 }
