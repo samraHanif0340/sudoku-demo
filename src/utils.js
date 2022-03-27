@@ -52,6 +52,35 @@ const validatePuzzle = (grid) => {
 
 }
 
+const setEmptyStringsToZero = (grid) => {
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            if (grid[i][j] == "") {
+                grid[i][j] = 0
+            } else {
+                grid[i][j] = Number(grid[i][j])
+            }
+        }
+    }
+
+    return grid
+}
+
+const encodePuzzleData = (grid) => {
+
+    let tempGrid = setEmptyStringsToZero(grid)
+
+    const encodeBoard = (board) => board.reduce((result, row, i) => result + `%5B${encodeURIComponent(row)}%5D${i === board.length - 1 ? '' : '%2C'}`, '')
+
+    const encodeParams = (params) =>
+        Object.keys(params)
+            .map(key => key + '=' + `%5B${encodeBoard(params[key])}%5D`)
+            .join('&');
+
+    const data = { board: tempGrid }
+    return encodeParams(data);
+}
+
 export {
-    getCharSeries, validatePuzzle
+    getCharSeries, validatePuzzle, setEmptyStringsToZero, encodePuzzleData
 }

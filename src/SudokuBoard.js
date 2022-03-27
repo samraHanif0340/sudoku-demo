@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCharSeries, validatePuzzle } from './utils'
+import { getCharSeries, validatePuzzle, encodePuzzleData } from './utils'
 import SudokuCell from "./SudokuCell";
 
 const Difficulty = {
@@ -39,8 +39,29 @@ function SudokuBoard() {
                     grid.push(currRow)
                 }
                 setPuzzleGrid(grid)
+                setPuzzleStatus(Status.Valid)
             });
     }
+
+    const solveSudokuBoard = () => {
+
+        const data = encodePuzzleData(puzzleGrid)
+
+        fetch('https://sugoku.herokuapp.com/solve', {
+            method: 'POST',
+            body: data,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .then(response => response.json())
+            .then(res => {
+                console.log(res)
+                setPuzzleGrid(null)
+                setPuzzleGrid(res.solution)
+                setPuzzleStatus(Status.Solved)
+            });
+
+    }
+
 
     useEffect(() => {
         fetchAndInitializeBoard(Difficulty.Easy);
@@ -49,6 +70,14 @@ function SudokuBoard() {
     const onCellValChange = (row, col, val) => {
         puzzleGrid[row][col] = val;
         setPuzzleGrid(puzzleGrid)
+    }
+
+    const checkGridStatus = () => {
+        if (!validatePuzzle(puzzleGrid)) {
+            setPuzzleStatus(Status.InValid);
+        } else {
+            setPuzzleStatus(Status.Valid);
+        }
     }
 
     return (
@@ -70,10 +99,15 @@ function SudokuBoard() {
                     </table>
                 </div>
                 <div className="action-buttons">
-                    <button onClick={() => { validatePuzzle(puzzleGrid) }}>Validate</button>
+                    <button onClick={checkGridStatus}>Validate</button>
+                    <button onClick={solveSudokuBoard}>Solve</button>
+
                     <button onClick={() => { fetchAndInitializeBoard(Difficulty.Easy) }}>Easy</button>
                     <button onClick={() => { fetchAndInitializeBoard(Difficulty.Medium) }}>Medium</button>
                     <button onClick={() => { fetchAndInitializeBoard(Difficulty.Hard) }}>Hard</button>
+                </div>
+                <div className="puzzle-status">
+                    Status : {puzzleStatus}
                 </div>
             </div>}
             {!puzzleGrid && <div>
