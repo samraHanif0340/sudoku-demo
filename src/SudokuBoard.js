@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getCharSeries, encodePuzzleData } from './utils'
 import SudokuCell from "./SudokuCell";
+import spinnerGIF from './assets/loaderGif.gif'
 
 const Difficulty = {
     Easy: 'easy',
@@ -93,6 +94,7 @@ function SudokuBoard() {
     }
 
     return (
+
         <div className="container">
             <h3 className="title">SUDOKU GAME !!</h3>
             {puzzleGrid && <div className="class-center">
@@ -112,31 +114,34 @@ function SudokuBoard() {
                     </table>
                 </div>
                 <div className="action-buttons">
-                <div className="btn-group my-3 mr-3">
-                    <button  type="button" className="btn btn-outline-success" onClick={checkGridStatus}>Validate</button>
-                    <button  className="btn btn-outline-success" onClick={solveSudokuBoard}>Solve</button>
+                    <div className="btn-group my-3 mr-3">
+                        <button type="button" className="btn btn-outline-success" onClick={checkGridStatus}>Validate</button>
+                        <button className="btn btn-outline-success" onClick={solveSudokuBoard}>Solve</button>
                     </div>
 
                     <div className="btn-group my-3 ml-3">
-                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Easy) }}>Easy</button>
-                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Medium) }}>Medium</button>
-                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Hard) }}>Hard</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Easy) }}>Easy</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Medium) }}>Medium</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Hard) }}>Hard</button>
                     </div>
-               
+
                 </div>
-                <div class="row">
-                <div className="col-lg-6 puzzle-status">
-                    Status : {puzzleStatus}
+                <div className="row">
+                    <div className="col-lg-6 puzzle-status">
+                        Status : {puzzleStatus}
+                    </div>
+                    <div className="col-lg-6 puzzle-difficulty">
+                        Difficulty : {currDifficulty.toUpperCase()}
+                    </div>
                 </div>
-                <div className="col-lg-6 puzzle-difficulty">
-                    Difficulty : {currDifficulty.toUpperCase()}
-                </div>
-                </div>
-                
+
             </div>}
-            {!puzzleGrid && <div>
-                Initializing grid...
-            </div>}
+            {!puzzleGrid &&
+                <div style={{ 'text-align': 'center' }}>
+                    <img style={{ height: '50px' }} src={spinnerGIF} />
+                    &nbsp; &nbsp; Initializing game...
+                </div>
+            }
         </div>
     );
 }
