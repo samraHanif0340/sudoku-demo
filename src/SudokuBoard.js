@@ -54,7 +54,6 @@ function SudokuBoard() {
         })
             .then(response => response.json())
             .then(res => {
-                console.log(res)
                 setPuzzleGrid(null)
                 setPuzzleGrid(res.solution)
                 setPuzzleStatus(Status.Solved)
@@ -73,11 +72,22 @@ function SudokuBoard() {
     }
 
     const checkGridStatus = () => {
-        if (!validatePuzzle(puzzleGrid)) {
-            setPuzzleStatus(Status.InValid);
-        } else {
-            setPuzzleStatus(Status.Valid);
-        }
+
+        const data = encodePuzzleData(puzzleGrid)
+
+        fetch('https://sugoku.herokuapp.com/validate', {
+            method: 'POST',
+            body: data,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === 'broken'){
+                    setPuzzleStatus(Status.InValid)
+                } else {
+                    setPuzzleStatus(Status.Valid)
+                }
+            });
     }
 
     return (
