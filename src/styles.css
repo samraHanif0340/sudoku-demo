@@ -1,3 +1,16 @@
+.class-center {
+    margin: 0 auto;
+}
+
+.container {
+    width: max-content;
+    margin: 0 auto;
+}
+
+.title {
+    text-align: center;
+}
+
 .cell {
     width: 40px;
     height: 40px;
@@ -14,4 +27,18 @@ td:nth-child(3n) {
   
 tr:nth-child(3n) {
     border-bottom: 3px solid black;
+}
+
+.puzzle-status{
+    font-size: large;
+    color: gray;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.puzzle-difficulty{
+    font-size: large;
+    color: gray;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }

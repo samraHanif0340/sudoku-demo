@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCharSeries, validatePuzzle, encodePuzzleData } from './utils'
+import { getCharSeries, encodePuzzleData } from './utils'
 import SudokuCell from "./SudokuCell";
 
 const Difficulty = {
@@ -9,9 +9,9 @@ const Difficulty = {
 }
 
 const Status = {
-    Valid: 'Valid',
-    InValid: 'In-Valid',
-    Solved: 'Solved'
+    Valid: 'VALID',
+    InValid: 'IN-VALID',
+    Solved: 'SOLVED'
 }
 
 
@@ -19,8 +19,10 @@ function SudokuBoard() {
 
     const [puzzleGrid, setPuzzleGrid] = useState(null);
     const [puzzleStatus, setPuzzleStatus] = useState(Status.Valid);
+    const [currDifficulty, setCurrDifficulty] = useState(Difficulty.Easy);
 
     const fetchAndInitializeBoard = (difficulty) => {
+        setCurrDifficulty(difficulty)
         const grid = [];
         setPuzzleGrid(null);
         fetch("https://vast-chamber-17969.herokuapp.com/generate?difficulty=" + difficulty)
@@ -82,7 +84,7 @@ function SudokuBoard() {
         })
             .then(response => response.json())
             .then(res => {
-                if(res.status === 'broken'){
+                if (res.status === 'broken') {
                     setPuzzleStatus(Status.InValid)
                 } else {
                     setPuzzleStatus(Status.Valid)
@@ -92,7 +94,8 @@ function SudokuBoard() {
 
     return (
         <div className="container">
-            {puzzleGrid && <div className="container">
+            <h3 className="title">SUDOKU GAME !!</h3>
+            {puzzleGrid && <div className="class-center">
                 <div>
                     <table>
                         <tbody>
@@ -109,16 +112,27 @@ function SudokuBoard() {
                     </table>
                 </div>
                 <div className="action-buttons">
-                    <button onClick={checkGridStatus}>Validate</button>
-                    <button onClick={solveSudokuBoard}>Solve</button>
+                <div className="btn-group my-3 mr-3">
+                    <button  type="button" className="btn btn-outline-success" onClick={checkGridStatus}>Validate</button>
+                    <button  className="btn btn-outline-success" onClick={solveSudokuBoard}>Solve</button>
+                    </div>
 
-                    <button onClick={() => { fetchAndInitializeBoard(Difficulty.Easy) }}>Easy</button>
-                    <button onClick={() => { fetchAndInitializeBoard(Difficulty.Medium) }}>Medium</button>
-                    <button onClick={() => { fetchAndInitializeBoard(Difficulty.Hard) }}>Hard</button>
+                    <div className="btn-group my-3 ml-3">
+                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Easy) }}>Easy</button>
+                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Medium) }}>Medium</button>
+                    <button type="button" className="btn btn-outline-secondary" onClick={() => { fetchAndInitializeBoard(Difficulty.Hard) }}>Hard</button>
+                    </div>
+               
                 </div>
-                <div className="puzzle-status">
+                <div class="row">
+                <div className="col-lg-6 puzzle-status">
                     Status : {puzzleStatus}
                 </div>
+                <div className="col-lg-6 puzzle-difficulty">
+                    Difficulty : {currDifficulty.toUpperCase()}
+                </div>
+                </div>
+                
             </div>}
             {!puzzleGrid && <div>
                 Initializing grid...
